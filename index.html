@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" media="screen" href="css.css">
+    <script src="js/jquery-1.10.1.min.js"></script>
+    <script src="js/json2.js"></script>
+    <script src="js/js.js"></script>
+    <title></title>
+</head>
+<body>
+<div id="content">
+    <button id="return-button">Back</button>
+    <div id="view-select-language" class="jqs-view">
+        <h1>Dictonary</h1>
+        <ul>
+            <li data-langId="0">danish</li>
+            <li data-langId="1">english</li>
+        </ul>
+    </div>
+    <!--view with possible language to choose -->
+
+    <div id="view-game-mode" class="dn jqs-view">
+        <button type="button" id="new_word">Add new word</button>
+        <button type="button" id="game">Game</button>
+    </div>
+    <!--select game mode -->
+
+    <div id="view-add-new" class="dn jqs-view">
+        <div id="foreign_word">
+            <h2>danish</h2>
+            <textarea></textarea>
+        </div>
+        <div id="translate_word">
+            <h2>polish</h2>
+            <textarea></textarea>
+        </div>
+        <button type="button" id="save">Save</button>
+    </div>
+    <!--adding new work -->
+
+    <div id="view-game" class="dn jqs-view">
+        <div class="random_word">
+            <p id="window_with_random_word"></p>
+            <h3>danish word</h3>
+        </div>
+
+        <div id="translate" class="random_word">
+            <p>Example</p>
+            <h3>translation</h3>
+
+
+        </div>
+        <button id="check">Check</button>
+        <button id="solve">Hurra! I knew it</button>
+        <button id="solve_not">Ups! I need to try again</button>
+    </div>
+    <!--main game view-->
+
+</div>
+</body>
+</html>

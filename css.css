@@ -1,0 +1,147 @@
+.dn {
+    display: none;
+}
+
+body {
+    background-color: #FFFFCC;
+}
+
+button {
+    border-radius: 10px;
+}
+
+button#return-button {
+    border-radius: 8px;
+    margin: 10px 0 10px 10px;
+}
+
+div#content {
+    width: 600px;
+    max-height: 660px;
+    margin: 0 auto;
+    padding-bottom: 80px;
+    background-color: #CCCCFF;
+    border-radius: 10px;
+}
+
+div#view-select-language {
+    margin-left: 202px;
+}
+
+div#view-select-language ul {
+    list-style-image: url('images/back.png')
+}
+
+div#view-select-language ul li {
+    background-repeat: no-repeat;
+    margin: 0;
+    padding: 4px 0 4px 20px;
+    cursor: pointer;
+}
+
+li {
+    font-size: 25px;
+}
+
+div#view-game-mode {
+    margin: 20px 0 0 50px;
+    width: 500px;
+}
+
+button#new_word {
+    width: 215px;
+    height: 55px;
+    border-radius: 10px;
+    background-color: #adff2f;
+}
+
+button#game {
+    width: 215px;
+    height: 55px;
+    margin-left: 65px;
+    background-color: #adff2f;
+}
+
+div#view-add-new {
+    position: relative;
+    margin-left: 50px;
+    width: 500px;
+}
+
+h2 {
+    margin-left: 55px;
+}
+
+div#foreign_word {
+    position: absolute;
+
+}
+
+div#translate_word {
+    position: absolute;
+    left: 280px;
+}
+
+textarea {
+    resize: none;
+    width: 215px;
+    height: 55px;
+}
+
+button#save {
+    height: 36px;
+    width: 115px;
+    margin: 155px 0 0 190px;
+}
+
+div#view-game {
+    position: relative;
+    margin: 54px 0 0 50px;
+    width: 500px;
+}
+
+div#check_translation div {
+    position: absolute;
+}
+
+div.random_word {
+    border: 1px dotted #808080;
+    border-radius: 5px;
+    width: 215px;
+    height: 55px;
+    position: absolute;
+}
+
+div#translate {
+    margin-left: 280px;
+}
+
+h3 {
+    position: absolute;
+    top: -53px;
+    left: 52px;
+}
+
+p {
+    text-align: center;
+}
+
+button#check {
+    height: 36px;
+    width: 115px;
+    margin: 75px 0 0 187px;
+}
+
+button#solve {
+    position: absolute;
+    width: 180px;
+    left: 45px;
+    top: 128px;
+}
+
+button#solve_not {
+    position: absolute;
+    left: 278px;
+    top: 128px;
+    width: 180px;
+}
