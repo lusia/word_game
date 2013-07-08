@@ -117,6 +117,11 @@ $(document).ready(function () {
         };
 
         /**
+         * Display statistic
+         */
+        $("div#statistic ul li:first").append(localStorage);
+
+        /**
          * Choose language
          */
         $("div#view-select-language ul li").click(function () {
@@ -128,6 +133,24 @@ $(document).ready(function () {
         $("#return-button").click(function () {
             fHideAllViews();
             $("#view-select-language").show();
+        });
+
+        /**
+         * Add new language button
+         */
+
+        $("#new_language").click(function () {
+            var value = 2,
+                newLanguage = prompt("Please enter new language");
+
+            if ((newLanguage !== "") && (newLanguage.indexOf("-") !== -1)){ //&& (typeof newLanguage !== number)) {
+                $("div#view-select-language ul").append("<li>" + newLanguage + "</li>").attr('data-langId', value++);
+                console.log($("div#view-select-language ul").attr('data-langId'));
+            }
+            else {
+                alert("Please check if you you enter the new language");
+            }
+
         });
 
         /**

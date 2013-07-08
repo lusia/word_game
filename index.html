@@ -14,9 +14,11 @@
     <div id="view-select-language" class="jqs-view">
         <h1>Dictonary</h1>
         <ul>
-            <li data-langId="0">danish</li>
-            <li data-langId="1">english</li>
+            <li data-langId="0">danish - english</li>
+            <li data-langId="1">english - danish</li>
+            <li data-langId="2">english - polish</li>
         </ul>
+        <button type="button" id="new_language">Add new language</button>
     </div>
     <!--view with possible language to choose -->
 
@@ -28,11 +30,11 @@
 
     <div id="view-add-new" class="dn jqs-view">
         <div id="foreign_word">
-            <h2>danish</h2>
+            <h2>word</h2>
             <textarea></textarea>
         </div>
         <div id="translate_word">
-            <h2>polish</h2>
+            <h2>translation</h2>
             <textarea></textarea>
         </div>
         <button type="button" id="save">Save</button>
@@ -42,11 +44,13 @@
     <div id="view-game" class="dn jqs-view">
         <div class="random_word">
             <p id="window_with_random_word"></p>
-            <h3>danish word</h3>
+
+            <h3>word</h3>
         </div>
 
         <div id="translate" class="random_word">
             <p>Example</p>
+
             <h3>translation</h3>
 
 
@@ -57,6 +61,14 @@
     </div>
     <!--main game view-->
 
+</div>
+<div id="statistic">
+    <h2>Your statistic</h2>
+
+    <ul>
+        <li>All words, which you enter: </li>
+        <li>Words for today: </li>
+    </ul>
 </div>
 </body>
 </html>
