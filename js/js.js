@@ -1,6 +1,6 @@
 $(document).ready(function () {
-    var app = {}, Word, config = {langId:null},
-        displayDataFinder, wordStorage,
+    var app = {}, Word, currentLangId,
+        displayDataFinder, wordStorage, dictionaryStorage,
         progressPattern = [1, 1, 2, 3, 5, 7, 9, 11, 18];
 
     Word = function (source, destination, step, langId) {
@@ -10,6 +10,11 @@ $(document).ready(function () {
         this.displayDate = null;
         this.step = step;
         this.langId = langId;
+    };
+    Dictionary = function (id, trFrom, trTo) {
+        this.id = id;
+        this.trFrom = trFrom; //translation from which language
+        this.trTo = trTo; //translation to which language
     };
 
     displayDataFinder = {
@@ -37,6 +42,7 @@ $(document).ready(function () {
      */
     wordFinder = {
         /**
+         * Find a word to display
          * @param words array
          * @param langId int
          * @param date date
@@ -44,13 +50,50 @@ $(document).ready(function () {
          * @return Word|null
          */
         find:function (words, langId, date) {
-            var i, word, displayDate, out = null;
+            var out = this.findAllToDisplayToday(words, langId, date);
+
+            if (out.length === 0) {
+                return null;
+            } else {
+                return out.pop();
+            }
+        },
+
+        /**
+         * Find all words to display in actual date
+         * @param words
+         * @param langId
+         * @param date
+         *
+         * @return {Array}
+         */
+        findAllToDisplayToday:function (words, langId, date) {
+            var i, word, displayDate, out = [];
 
             for (i = 0; i < words.length; i++) {
                 word = words[i];
                 displayDate = new Date(word.displayDate);
                 if ((displayDate.getTime() <= date.getTime()) && (word.langId === langId)) {
-                    out = word;
+                    out.push(word);
+                }
+            }
+
+            return out;
+        },
+        /**
+         * Find all words to display
+         * @param words array
+         * @param langId int
+         *
+         * @return array
+         */
+        findAll:function (words, langId) {
+            var i, word, out = [];
+
+            for (i = 0; i < words.length; i++) {
+                word = words[i];
+                if (word.langId === langId) {
+                    out.push(word);
                 }
             }
 
@@ -60,6 +103,7 @@ $(document).ready(function () {
 
     wordStorage = {
         localStorageKey:'words',
+
         /**
          * Add word to local storage
          * @param word
@@ -104,6 +148,52 @@ $(document).ready(function () {
             localStorage.setItem(this.localStorageKey, json);
         }
     };
+    dictionaryStorage = {
+        localStorageKey:'dictionaries',
+        /**
+         * Add new dictionary to localStorage
+         * @param dictionary
+         */
+
+        addNewDictionary:function (dictionary) {
+            var json, dictionaries = this.getDictionaries();
+
+            dictionaries.push(dictionary);
+            json = JSON.stringify(dictionaries); //object to json string
+            localStorage.setItem(this.localStorageKey, json);
+        },
+        /**
+         * Return array of dictionaries
+         * @return array of dictionaries
+         */
+        getDictionaries:function () {
+            var json, out = [];
+
+            json = localStorage.getItem(this.localStorageKey); //string
+            if (json !== null) {
+                out = JSON.parse(json);
+            }
+
+            return out;
+        }
+    };
+    /**
+     * Get dictionary from the localStorage
+     */
+    app.listDictionaries = function () {
+        var dictionaries = dictionaryStorage.getDictionaries(), i,
+            ul = $("div#view-select-language ul");
+        console.log(dictionaries);
+        ul.empty();
+
+        $(dictionaries).each(function (i, dictionary) {
+            ul.append($("<li></li>").text(dictionary.trFrom + "-" + dictionary.trTo).attr("data-langId", dictionary.id));
+            ul.append($("<li></li>").text(this.trFrom + "-" + this.trTo).attr("data-langId", this.id));
+        });
+//        for (i = 0; i < dictionaries.length; i++) {
+//            ul.append($("<li></li>").text(dictionaries[i].trFrom + "-" + dictionaries[i].trTo).attr("data-langId", dictionaries[i].id));
+//        }
+    }
 
     app.currentWord = null;
     /**
@@ -117,17 +207,25 @@ $(document).ready(function () {
         };
 
         /**
-         * Display statistic
-         */
-        $("div#statistic ul li:first").append(localStorage);
-
-        /**
          * Choose language
          */
-        $("div#view-select-language ul li").click(function () {
+        $("#view-select-language").on("click", "li", function () {
+            var container;
+
             fHideAllViews();
-            config.langId = $(this).attr('data-langId');
+
+            currentLangId = $(this).attr('data-langId');
             $("#view-game-mode").show();
+
+            /**
+             * Display statistic
+             */
+
+            $("div#statistic").show();
+            container = wordFinder.findAll(wordStorage.getWords(), currentLangId);
+            $("div#statistic ul li:nth-child(1)").text("All words, you entered : " + container.length);
+            container = wordFinder.findAllToDisplayToday(wordStorage.getWords(), currentLangId, new Date());
+            $("div#statistic ul li:nth-child(2)").text("Words for today: " + container.length);
         });
 
         $("#return-button").click(function () {
@@ -139,17 +237,14 @@ $(document).ready(function () {
          * Add new language button
          */
 
-        $("#new_language").click(function () {
-            var value = 2,
-                newLanguage = prompt("Please enter new language");
+        $("#new_dictionary").click(function () {
+            $("#add_new_dictionary").show();
+            $("#view-select-language").hide();
+            $("#return-button").click(function () {
+                fHideAllViews();
+                $("#view-select-language").show();
+            });
 
-            if ((newLanguage !== "") && (newLanguage.indexOf("-") !== -1)){ //&& (typeof newLanguage !== number)) {
-                $("div#view-select-language ul").append("<li>" + newLanguage + "</li>").attr('data-langId', value++);
-                console.log($("div#view-select-language ul").attr('data-langId'));
-            }
-            else {
-                alert("Please check if you you enter the new language");
-            }
 
         });
 
@@ -182,13 +277,40 @@ $(document).ready(function () {
             /**
              * create new object with new word
              */
-            word = new Word(source, destination, 0, config.langId);
+            word = new Word(source, destination, 0, currentLangId);
             word.displayDate = displayDataFinder.findDate(progressPattern, word.step);
             wordStorage.addWord(word);
 
             $("div#foreign_word textarea").val("");
             $("div#translate_word textarea").val("");
         });
+
+
+        /**
+         * Save new dictionary
+         */
+        $("#save_new_dictionary").click(function () {
+            var trFrom, trTo, dictionary, langId;
+
+            $(".jqs-view").hide();
+            $("#view-select-language").show();
+
+            trFrom = $("#jq-from").val();
+            trTo = $("#jq-to").val();
+            langId = (new Date().getTime());
+
+            /**
+             * Create new dictionary object
+             */
+            dictionary = new Dictionary(langId, trFrom, trTo);
+            dictionaryStorage.addNewDictionary(dictionary);
+
+            app.listDictionaries();
+            $("#jq-from").val("");
+            $("#jq-to").val("");
+        });
+
+
     };
 
     /**
@@ -208,12 +330,12 @@ $(document).ready(function () {
 
     };
     /**
-     * Display current word
+     * Find new current word
      */
     app.findNewCurrentWord = function () {
         var words = wordStorage.getWords();
 
-        this.currentWord = wordFinder.find(words, config.langId, new Date());
+        this.currentWord = wordFinder.find(words, currentLangId, new Date());
     };
     /**
      * Handle game action
@@ -273,6 +395,7 @@ $(document).ready(function () {
         });
     };
 
+    app.listDictionaries();
     app.setupViewEvents();
     app.defineSaveAction();
     app.defineGameActions();

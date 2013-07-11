@@ -12,13 +12,20 @@
 <div id="content">
     <button id="return-button">Back</button>
     <div id="view-select-language" class="jqs-view">
-        <h1>Dictonary</h1>
+        <h1>Dictionary</h1>
         <ul>
-            <li data-langId="0">danish - english</li>
-            <li data-langId="1">english - danish</li>
-            <li data-langId="2">english - polish</li>
         </ul>
-        <button type="button" id="new_language">Add new language</button>
+        <button type="button" id="new_dictionary">Add new dictionary</button>
+    </div>
+    <!--field to add new dictionary-->
+    <div id="add_new_dictionary" class="dn jqs-view">
+        <h4>Translate</h4>
+        <p>From:</p>
+        <input id="jq-from">
+
+        <p>To:</p>
+        <input id="jq-to">
+        <button type="button" id="save_new_dictionary">Save</button>
     </div>
     <!--view with possible language to choose -->
 
@@ -62,12 +69,12 @@
     <!--main game view-->
 
 </div>
-<div id="statistic">
+<div id="statistic" class="dn jqs-view">
     <h2>Your statistic</h2>
 
     <ul>
-        <li>All words, which you enter: </li>
-        <li>Words for today: </li>
+        <li></li>
+        <li></li>
     </ul>
 </div>
 </body>
