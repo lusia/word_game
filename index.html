@@ -1,81 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" type="text/css" media="screen" href="css.css">
+    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link rel="stylesheet" type="text/css" media="screen" href="css/css.css">
     <script src="js/jquery-1.10.1.min.js"></script>
     <script src="js/json2.js"></script>
+    <script src="js/underscore-min.js"></script>
     <script src="js/js.js"></script>
     <title></title>
 </head>
 <body>
 <div id="content">
-    <button id="return-button">Back</button>
-    <div id="view-select-language" class="jqs-view">
-        <h1>Dictionary</h1>
-        <ul>
+    <div class="row-fluid">
+        <div id="return-button" class="span1">
+            <button class="btn btn-primary">Home</button>
+        </div>
+    </div>
+    <div class="row-fluid">
+        <ul id="breadcrumb" class="breadcrumb span4 offset1">
         </ul>
-        <button type="button" id="new_dictionary">Add new dictionary</button>
     </div>
-    <!--field to add new dictionary-->
-    <div id="add_new_dictionary" class="dn jqs-view">
-        <h4>Translate</h4>
-        <p>From:</p>
-        <input id="jq-from">
+    <div class="row-fluid">
 
-        <p>To:</p>
-        <input id="jq-to">
-        <button type="button" id="save_new_dictionary">Save</button>
-    </div>
-    <!--view with possible language to choose -->
 
-    <div id="view-game-mode" class="dn jqs-view">
-        <button type="button" id="new_word">Add new word</button>
-        <button type="button" id="game">Game</button>
-    </div>
-    <!--select game mode -->
+        <div id="middle" class="span6 offset1 well">
+            <div id="view-select-language" class="jqs-view row-fluid">
 
-    <div id="view-add-new" class="dn jqs-view">
-        <div id="foreign_word">
-            <h2>word</h2>
-            <textarea></textarea>
+                <div class="span5 offset4">
+                    <h1>Dictionary</h1>
+                    <ul class="nav nav-list">
+                    </ul>
+                    <button type="button" id="new_dictionary" class="btn btn-primary btn-large">Add new dictionary</button>
+                </div>
+            </div>
+
+            <!--field to add new dictionary-->
+            <div id="add_new_dictionary" class="dn jqs-view row-fluid">
+                <div class="span4 offset4">
+                    <h2>Translate</h2>
+                </div>
+                <div class="row-fluid span9">
+                    <div class="span2">
+                        <h3>From:</h3>
+                        <input type="text" id="jq-from">
+                    </div>
+                    <div class="span3 offset7">
+                        <h3>To:</h3>
+                        <input type="text" id="jq-to">
+                    </div>
+                    <div class="span2 offset6">
+                        <button type="button" id="save_new_dictionary" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+
+            </div>
+            <!--view with possible language to choose -->
+
+            <div id="view-game-mode" class="dn jqs-view row-fluid">
+                <div class="offset3">
+                    <button type="button" id="new_word" class="btn btn-info btn-large">Add new word</button>
+                    <button type="button" id="game" class="btn btn-info btn-large">Game</button>
+                </div>
+            </div>
+            <!--select game mode -->
+
+            <div id="view-add-new" class="dn jqs-view row-fluid">
+                <div>
+                    <div id="foreign_word" class="span4">
+                        <h3>word</h3>
+                        <textarea></textarea>
+                        <span class="dn help-inline"></span>
+                    </div>
+                    <div id="translate_word" class="span4 offset3">
+                        <h3>translation</h3>
+                        <textarea></textarea>
+                        <span class="dn help-inline"></span>
+                    </div>
+                </div>
+                <div class="span2 offset5">
+                    <button type="button" id="save" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+            <!--adding new work -->
+
+            <div id="view-game" class="dn jqs-view row-fluid">
+                <div class="random_word span5 offset1">
+                    <h3>word</h3>
+
+                    <p id="window_with_random_word"></p>
+                </div>
+
+                <div id="translate" class="random_word span4 offset2">
+                    <h3>translation</h3>
+
+                    <p></p>
+                </div>
+                <div class="row-fluid">
+                    <div class="span4 offset4">
+                        <button id="check" class="btn btn-primary">Check</button>
+                        <button id="solve" class="btn btn-success">Hurra! I knew it</button>
+                        <button id="solve_not" class="btn btn-warning">Ups! I need to try again</button>
+                    </div>
+                </div>
+            </div>
+            <!--main game view-->
         </div>
-        <div id="translate_word">
-            <h2>translation</h2>
-            <textarea></textarea>
+
+
+        <div id="statistic" class="dn jqs-view span3 well">
+            <h2>Your statistic</h2>
+
+            <ul>
+                <li></li>
+                <li></li>
+            </ul>
+
+            <div class="progress progress-info progress-striped">
+                <div class="bar"></div>
+            </div>
         </div>
-        <button type="button" id="save">Save</button>
+        <div id="description" class="jqs-view span3 well">
+            <p>
+                Hi, I made this application, because I needed something to help me with learning danish. This application is like a game, you can add a language, which you like to learn and than add words, which need to be remember. You can add languages as many as you like. Everything is saved in localStorage. Unfortunately it won't works in IE. I hope this application will be helpful also for you. Enjoy it :)
+
+            </p>
+        </div>
     </div>
-    <!--adding new work -->
-
-    <div id="view-game" class="dn jqs-view">
-        <div class="random_word">
-            <p id="window_with_random_word"></p>
-
-            <h3>word</h3>
-        </div>
-
-        <div id="translate" class="random_word">
-            <p>Example</p>
-
-            <h3>translation</h3>
-
-
-        </div>
-        <button id="check">Check</button>
-        <button id="solve">Hurra! I knew it</button>
-        <button id="solve_not">Ups! I need to try again</button>
-    </div>
-    <!--main game view-->
-
 </div>
-<div id="statistic" class="dn jqs-view">
-    <h2>Your statistic</h2>
+<!--display statistic-->
 
-    <ul>
-        <li></li>
-        <li></li>
-    </ul>
-</div>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="js/bootstrap.min.js"></script>
 </body>
 </html>

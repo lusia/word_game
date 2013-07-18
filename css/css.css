@@ -1,0 +1,57 @@
+.dn {
+    display: none;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+#middle {
+    margin-top: 100px;
+}
+
+div#view-select-language ul li {
+    cursor: pointer;
+}
+
+button#new_word {
+    margin-right: 20px;
+}
+
+textarea {
+    resize: none;
+}
+
+button#check {
+    margin-bottom: 15px;
+}
+
+button#solve {
+    margin-right: 20px;
+}
+
+div#statistic {
+    display: none;
+    margin-top: 100px;
+}
+
+div#description {
+    margin-top: 100px;
+}
+
+div#description p {
+    font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+    font-size: 15px;
+    text-align: justify;
+    line-height: 25px;
+}
+
+#breadcrumb {
+    position: fixed;
+    top: 50px;
+}
+
+ul#breadcrumb li a:hover, ul#breadcrumb li a:focus {
+    text-decoration: none;
+}
