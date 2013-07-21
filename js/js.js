@@ -4,6 +4,9 @@ $(document).ready(function () {
         progressPattern = [1, 1, 2, 3, 5, 7, 9, 11, 18];
 
     $("#return-button").hide();
+    $("#description_of_add_dictionary").hide();
+    $("#description_of_add_word").hide();
+    $("#description_of_game").hide();
 
     Word = function (source, destination, step, langId) {
         this.id = (new Date()).getTime();
@@ -16,8 +19,8 @@ $(document).ready(function () {
 
     Dictionary = function (id, trFrom, trTo) {
         this.id = id;
-        this.trFrom = trFrom; //translation from which language
-        this.trTo = trTo; //translation to which language
+        this.trFrom = $.trim(trFrom); //translation from which language
+        this.trTo = $.trim(trTo); //translation to destination language
     };
 
     breadCrumb = {
@@ -33,7 +36,6 @@ $(document).ready(function () {
             return this;
         },
         revertTo:function (position) {
-            console.log(position);
             this.paths = this.paths.splice(0, position + 1);
             this.render();
         },
@@ -50,6 +52,12 @@ $(document).ready(function () {
                     $(".jqs-view").hide();
                     $("#view-" + view).show();
                     breadCrumb.revertTo(position);
+
+//                    if ((view === "select-language") && (this.paths[i].label === "Home")) {
+//                        $("#return-button").hide();
+//                        $("#description").show();
+//                    }
+
                 });
                 this.$el.append(crumb);
                 crumb.wrap($('<li></li>'));
@@ -57,6 +65,8 @@ $(document).ready(function () {
             }
             crumb = $('<li></li>').text(this.paths[this.paths.length - 1].label);
             this.$el.append(crumb);
+
+
         }
     };
 
@@ -241,11 +251,7 @@ $(document).ready(function () {
 
         $(dictionaries).each(function (i, dictionary) {
             ul.append($("<li></li>").text(dictionary.trFrom + "-" + dictionary.trTo).attr("data-langId", dictionary.id));
-//            ul.append($("<li></li>").text(this.trFrom + "-" + this.trTo).attr("data-langId", this.id));
         });
-//        for (i = 0; i < dictionaries.length; i++) {
-//            ul.append($("<li></li>").text(dictionaries[i].trFrom + "-" + dictionaries[i].trTo).attr("data-langId", dictionaries[i].id));
-//        }
     }
 
     app.currentWord = null;
@@ -258,6 +264,7 @@ $(document).ready(function () {
         displayHomeScene = function () {
             fHideAllViews();
             $("#view-select-language").show();
+            $("#description").show();
             $("#return-button").hide();
             breadCrumb.clear().addPath({label:'Home', viewToDisplay:'select-language'}).render();
         };
@@ -303,12 +310,12 @@ $(document).ready(function () {
         /**
          * Add new language button
          */
-
         $("#new_dictionary").click(function () {
-            breadCrumb.addPath({label:'New dictionary', click_action:function () {
-            }}).render();
+            breadCrumb.addPath({label:'Add new language'}).render();
             $("#add_new_dictionary").show();
             $("#return-button").show();
+            $("#description").hide();
+            $("#description_of_add_dictionary").show();
             $("#view-select-language").hide();
             $("#return-button").click(function () {
                 fHideAllViews();
@@ -322,7 +329,8 @@ $(document).ready(function () {
         $("#new_word").click(function () {
             fHideAllViews();
             $("#view-add-new").show();
-            breadCrumb.addPath({label:'New word'}).render();
+            $("#description_of_add_word").show();
+            breadCrumb.addPath({label:'Add new word'}).render();
         });
 
         /**
@@ -331,6 +339,7 @@ $(document).ready(function () {
         $("#game").click(function () {
             fHideAllViews();
             $("#view-game").show();
+            $("#description_of_game").show();
             breadCrumb.addPath({label:'Game'}).render();
         });
     };
@@ -344,15 +353,21 @@ $(document).ready(function () {
 
             source = $("div#foreign_word textarea").val();
             destination = $("div#translate_word textarea").val();
-            console.log(typeof source, typeof destination);
 
-            if ((source === "") && (destination === "")) {
-                $("#view-add-new div").addClass("control-group error");
-                $("#foreign_word").addClass("controls");
-                $("#translate_word").addClass("controls");
-                $("textarea").attr("id", "inputError");
-                $(".help-inline").show().text("Please enter the value");
-            }
+            $(".foreign, .translate").each(function (i, elem) {
+                var $elem = $(elem),
+                    val = $.trim($elem.val());
+
+
+                if (val.length === 0) {
+                    isValid = false;
+                    $("#view-add-new div").addClass("error");
+                    $elem.addClass("inputError");
+                    $elem.next('.help-inline').show().text("Please enter the value");
+                }
+            });
+
+            $(".alert.alert-info").show();
 
             /**
              * create new object with new word
@@ -370,24 +385,39 @@ $(document).ready(function () {
          * Save new dictionary
          */
         $("#save_new_dictionary").click(function () {
-            var trFrom, trTo, dictionary, langId;
+            var $trFrom = $("#jq-from"), $trTo = $("#jq-to"), dictionary, langId, isValid = true;
 
-            $(".jqs-view").hide();
-            $("#view-select-language").show();
+            $.each([$trFrom, $trTo ], function (i, $elem) {
+                var val = $.trim($elem.val());
 
-            trFrom = $("#jq-from").val();
-            trTo = $("#jq-to").val();
-            langId = (new Date().getTime());
+                if (val.length === 0) {
+                    isValid = false;
+                    $elem.parent('div').addClass("error");
+                    $elem.addClass("inputError");
+                    $elem.next('.help-inline').show().text("Field cannot be empty");
+                } else {
+                    $elem.removeClass("inputError");
+                    $elem.parent('div').removeClass("error");
+                    $elem.next('.help-inline').hide()
+                }
+            });
 
+            if (isValid) {
+                $(".jqs-view").hide();
+                $("#view-select-language").show();
+
+                langId = (new Date().getTime());
             /**
              * Create new dictionary object
              */
-            dictionary = new Dictionary(langId, trFrom, trTo);
+            dictionary = new Dictionary(langId, $trFrom, $trTo);
             dictionaryStorage.addNewDictionary(dictionary);
 
             app.listDictionaries();
-            $("#jq-from").val("");
-            $("#jq-to").val("");
+                $trFrom.val("");
+                $trTo.val("");
+
+            }
         });
 
 
@@ -480,8 +510,14 @@ $(document).ready(function () {
         });
     };
 
-    app.listDictionaries();
-    app.setupViewEvents();
-    app.defineSaveAction();
-    app.defineGameActions();
+    if (Modernizr.localstorage === false) {
+        $(".alert.alert-error").show();
+        $("#new_dictionary").hide();
+    }   else {
+        app.listDictionaries();
+        app.setupViewEvents();
+        app.defineSaveAction();
+        app.defineGameActions();
+    }
+
 });
