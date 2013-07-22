@@ -496,7 +496,7 @@ $(document).ready(function () {
          * If user doesn't guess word, the step of the word will be reset
          */
         $("#solve_not").click(function () {
-            $("#check").show();
+            $("#check, #solve").hide();
             var word = that.currentWord;
 
             wordStorage.removeWord(word);
@@ -511,7 +511,7 @@ $(document).ready(function () {
          * If user guess word, the step of the word will be increased
          */
         $("#solve").click(function () {
-            $("#check").show();
+            $("#check, #solve_not").hide();
             var word = that.currentWord;
 
             wordStorage.removeWord(word);
