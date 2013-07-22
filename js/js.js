@@ -40,25 +40,27 @@ $(document).ready(function () {
             this.render();
         },
         render:function () {
-            var crumb, i, view, position;
+            var crumb, i, that = this, fn;
 
             this.$el.empty();
 
             for (i = 0; i < this.paths.length - 1; i++) { //not very optimal but easy and fast
                 crumb = $('<a href="#"></a>').text(this.paths[i].label);
-                view = this.paths[i].viewToDisplay;
-                position = i;
-                crumb.click(function () {
-                    $(".jqs-view").hide();
-                    $("#view-" + view).show();
-                    breadCrumb.revertTo(position);
 
-//                    if ((view === "select-language") && (this.paths[i].label === "Home")) {
-//                        $("#return-button").hide();
-//                        $("#description").show();
-//                    }
+                fn = function (position, view) {
+                    return function () {
+                        $(".jqs-view").hide();
+                        $("#view-" + view).show();
+                        breadCrumb.revertTo(position);
 
-                });
+                        if (that.paths.length === 1) {
+                            $("#return-button").hide();
+                            $("#description").show();
+                        }
+                    }
+                }(i, this.paths[i].viewToDisplay);
+
+                crumb.click(fn);
                 this.$el.append(crumb);
                 crumb.wrap($('<li></li>'));
                 crumb.after($('<span> / </span>').addClass('divider'));
@@ -247,9 +249,10 @@ $(document).ready(function () {
     app.listDictionaries = function () {
         var dictionaries = dictionaryStorage.getDictionaries(), i,
             ul = $("div#view-select-language ul");
+
         ul.empty();
 
-        $(dictionaries).each(function (i, dictionary) {
+        $(dictionaries.reverse()).each(function (i, dictionary) {
             ul.append($("<li></li>").text(dictionary.trFrom + "-" + dictionary.trTo).attr("data-langId", dictionary.id));
         });
     }
@@ -349,7 +352,7 @@ $(document).ready(function () {
      */
     app.defineSaveAction = function () {
         $("#save").click(function () {
-            var word, source, destination, words;
+            var word, source, destination, words, isValid = true;
 
             source = $("div#foreign_word textarea").val();
             destination = $("div#translate_word textarea").val();
@@ -361,23 +364,30 @@ $(document).ready(function () {
 
                 if (val.length === 0) {
                     isValid = false;
-                    $("#view-add-new div").addClass("error");
+                    $elem.parent('div').addClass("error");
                     $elem.addClass("inputError");
                     $elem.next('.help-inline').show().text("Please enter the value");
+                    $(".alert.alert-info").hide();
+                } else {
+                    $elem.removeClass("inputError");
+                    $elem.parent('div').removeClass("error");
+                    $elem.next('.help-inline').hide()
                 }
             });
-
-            $(".alert.alert-info").show();
 
             /**
              * create new object with new word
              */
-            word = new Word(source, destination, 0, currentLangId);
-            word.displayDate = displayDataFinder.findDate(progressPattern, word.step);
-            wordStorage.addWord(word);
 
-            $("div#foreign_word textarea").val("");
-            $("div#translate_word textarea").val("");
+            if (isValid) {
+                $(".alert.alert-info").show();
+                word = new Word(source, destination, 0, currentLangId);
+                word.displayDate = displayDataFinder.findDate(progressPattern, word.step);
+                wordStorage.addWord(word);
+
+                $("div#foreign_word textarea").val("");
+                $("div#translate_word textarea").val("");
+            }
         });
 
 
@@ -403,20 +413,25 @@ $(document).ready(function () {
             });
 
             if (isValid) {
-                $(".jqs-view").hide();
-                $("#view-select-language").show();
-
                 langId = (new Date().getTime());
-            /**
-             * Create new dictionary object
-             */
-            dictionary = new Dictionary(langId, $trFrom, $trTo);
-            dictionaryStorage.addNewDictionary(dictionary);
 
-            app.listDictionaries();
+                /**
+                 * Create new dictionary object
+                 */
+                dictionary = new Dictionary(langId, $trFrom.val(), $trTo.val());
+                dictionaryStorage.addNewDictionary(dictionary);
+
                 $trFrom.val("");
                 $trTo.val("");
 
+                breadCrumb.revertTo(0);
+
+                $(".jqs-view").hide();
+                $("#view-select-language").show();
+                    $("#return-button").hide();
+                    $("#description").show();
+
+                app.listDictionaries();
             }
         });
 
@@ -513,11 +528,12 @@ $(document).ready(function () {
     if (Modernizr.localstorage === false) {
         $(".alert.alert-error").show();
         $("#new_dictionary").hide();
-    }   else {
+    } else {
         app.listDictionaries();
         app.setupViewEvents();
         app.defineSaveAction();
         app.defineGameActions();
     }
 
-});
+})
+;
