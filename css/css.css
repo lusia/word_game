@@ -22,6 +22,29 @@ button#new_word {
     margin-right: 20px;
 }
 
+div#word_to_remember {
+    width: 255px;
+}
+
+div#meaning_the_word {
+    width: 255px;
+    position: absolute;
+    top: 109px;
+    left: 445px;
+}
+
+div#translate_word h3 {
+    font-size: 20px;
+    line-height: 58px;
+    width: 200px;
+}
+
+div#foreign_word h3 {
+    font-size: 20px;
+    line-height: 25px;
+    width: 200px;
+}
+
 textarea {
     resize: none;
 }
@@ -34,12 +57,11 @@ button#solve {
     margin: 0 20px 15px 0;
 }
 
-div#statistic {
-    display: none;
+div#description {
     margin-top: 100px;
 }
 
-div#description {
+div#description_choices {
     margin-top: 100px;
 }
 

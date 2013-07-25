@@ -7,6 +7,8 @@ $(document).ready(function () {
     $("#description_of_add_dictionary").hide();
     $("#description_of_add_word").hide();
     $("#description_of_game").hide();
+    $("#description_choices").hide();
+    $("#statistic").hide();
 
     Word = function (source, destination, step, langId) {
         this.id = (new Date()).getTime();
@@ -57,6 +59,10 @@ $(document).ready(function () {
                             $("#return-button").hide();
                             $("#description").show();
                         }
+                        if (that.paths[position].viewToDisplay === "game-mode") {
+                            $("#description_choices").show();
+                        }
+
                     }
                 }(i, this.paths[i].viewToDisplay);
 
@@ -286,7 +292,7 @@ $(document).ready(function () {
 
             fHideAllViews();
             $("#return-button").show();
-
+            $("#description_choices").show();
             $("#view-game-mode").show();
             currentLangId = $(this).attr('data-langId');
             currentLang = dictionaryFinder.findById(currentLangId);
@@ -295,17 +301,7 @@ $(document).ready(function () {
                 viewToDisplay:'game-mode'
             };
             breadCrumb.addPath(crumb).render();
-            /**
-             * Display statistic
-             */
 
-            $("div#statistic").show();
-            container1 = wordFinder.findAll(wordStorage.getWords(), currentLangId);
-            $("div#statistic ul li:nth-child(1)").text("All words, you entered : " + container1.length);
-            container2 = wordFinder.findAllToDisplayToday(wordStorage.getWords(), currentLangId, new Date());
-            $("div#statistic ul li:nth-child(2)").text("Words for today: " + container2.length);
-
-            $(".bar").css("width", (100 * container2.length) / container1.length + "%");
         });
 
         $("#return-button").click(displayHomeScene);
@@ -343,6 +339,18 @@ $(document).ready(function () {
             fHideAllViews();
             $("#view-game").show();
             $("#description_of_game").show();
+
+            /**
+             * Display statistic
+             */
+            $("div#statistic").show();
+
+            container1 = wordFinder.findAll(wordStorage.getWords(), currentLangId);
+            $("div#statistic ul li:nth-child(1)").text("All words, you entered : " + container1.length);
+            container2 = wordFinder.findAllToDisplayToday(wordStorage.getWords(), currentLangId, new Date());
+            $("div#statistic ul li:nth-child(2)").text("Words for today: " + container2.length);
+            $(".bar").css("width", (100 * container2.length) / container1.length + "%")
+
             breadCrumb.addPath({label:'Game'}).render();
         });
     };
@@ -428,8 +436,8 @@ $(document).ready(function () {
 
                 $(".jqs-view").hide();
                 $("#view-select-language").show();
-                    $("#return-button").hide();
-                    $("#description").show();
+                $("#return-button").hide();
+                $("#description").show();
 
                 app.listDictionaries();
             }
