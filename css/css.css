@@ -6,7 +6,7 @@
     outline: none;
 }
 
-#middle {
+div#middle {
     margin-top: 100px;
 }
 
@@ -22,27 +22,12 @@ button#new_word {
     margin-right: 20px;
 }
 
-div#word_to_remember {
-    width: 255px;
+div.word_to_remember h3 {
+    font-size: 23px;
 }
 
-div#meaning_the_word {
-    width: 255px;
-    position: absolute;
-    top: 109px;
-    left: 445px;
-}
-
-div#translate_word h3 {
-    font-size: 20px;
-    line-height: 58px;
-    width: 200px;
-}
-
-div#foreign_word h3 {
-    font-size: 20px;
-    line-height: 25px;
-    width: 200px;
+div.meaning_the_word h3 {
+    font-size: 23px;
 }
 
 textarea {
