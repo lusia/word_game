@@ -129,11 +129,14 @@ $(document).ready(function () {
          * @return {Array}
          */
         findAllToDisplayToday:function (words, langId, date) {
-            var i, word, displayDate, out = [];
+            var i, word, displayDate, out = [], displayDateArray;
 
             for (i = 0; i < words.length; i++) {
                 word = words[i];
-                displayDate = new Date(word.displayDate);
+                displayDateArray = word.displayDate.slice(0,10).split("-");
+                displayDate = new Date(displayDateArray[0], displayDateArray[1]-1, displayDateArray[2]);
+                displayDate.setDate(displayDate.getDate() + 1);
+
                 if ((displayDate.getTime() <= date.getTime()) && (word.langId === langId)) {
                     out.push(word);
                 }
@@ -504,7 +507,8 @@ $(document).ready(function () {
          * If user doesn't guess word, the step of the word will be reset
          */
         $("#solve_not").click(function () {
-            $("#check, #solve").hide();
+            $("#solve_not, #solve").hide();
+
             var word = that.currentWord;
 
             wordStorage.removeWord(word);
@@ -513,13 +517,15 @@ $(document).ready(function () {
             wordStorage.addWord(word);
 
             fReset();
+            $("#check").show();
         });
 
         /**
          * If user guess word, the step of the word will be increased
          */
         $("#solve").click(function () {
-            $("#check, #solve_not").hide();
+            $("#solve, #solve_not").hide();
+            $("#check").show();
             var word = that.currentWord;
 
             wordStorage.removeWord(word);
